@@ -525,14 +525,17 @@ class UIController {
     }
 
     formatCurrency(amount) {
-        return new Intl.NumberFormat('es-ES', {
+        return new Intl.NumberFormat('es-MX', {
             style: 'currency',
             currency: 'USD'
         }).format(amount);
     }
 
     formatDate(dateString) {
-        return new Date(dateString + 'T00:00:00').toLocaleDateString('es-ES', {
+        // Parse date in local timezone to avoid timezone shift issues
+        const [year, month, day] = dateString.split('-');
+        const date = new Date(year, month - 1, day);
+        return date.toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
