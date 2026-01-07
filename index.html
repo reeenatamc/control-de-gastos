@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Gastos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <h1>💰 Control de Gastos</h1>
+            <ul class="nav-menu">
+                <li><a href="#" data-view="dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#" data-view="wallet" class="nav-link">Billetera</a></li>
+                <li><a href="#" data-view="config" class="nav-link">Configuración</a></li>
+            </ul>
+        </nav>
+
+        <!-- Dashboard View -->
+        <div id="dashboard" class="view active">
+            <h2>Dashboard Principal</h2>
+            
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="card income-card">
+                    <h3>Ingresos</h3>
+                    <p class="amount" id="total-income">$0.00</p>
+                </div>
+                <div class="card expense-card">
+                    <h3>Gastos</h3>
+                    <p class="amount" id="total-expenses">$0.00</p>
+                </div>
+                <div class="card balance-card">
+                    <h3>Balance</h3>
+                    <p class="amount" id="balance">$0.00</p>
+                </div>
+            </div>
+
+            <!-- Quick Add Transaction -->
+            <div class="quick-add">
+                <h3>Agregar Transacción Rápida</h3>
+                <form id="quick-add-form">
+                    <div class="form-row">
+                        <select id="quick-type" required>
+                            <option value="">Tipo</option>
+                            <option value="ingreso">Ingreso</option>
+                            <option value="gasto">Gasto</option>
+                        </select>
+                        <input type="number" id="quick-amount" placeholder="Valor" step="0.01" required>
+                        <select id="quick-category" required>
+                            <option value="">Categoría</option>
+                        </select>
+                        <input type="text" id="quick-description" placeholder="Descripción" required>
+                        <button type="submit" class="btn-primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-section">
+                <h3>Gastos por Categoría</h3>
+                <div id="category-chart" class="chart-container"></div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="recent-transactions">
+                <h3>Transacciones Recientes</h3>
+                <div id="recent-list"></div>
+            </div>
+        </div>
+
+        <!-- Wallet View -->
+        <div id="wallet" class="view">
+            <h2>Billetera Principal de Gastos</h2>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <input type="date" id="filter-date-from" placeholder="Desde">
+                <input type="date" id="filter-date-to" placeholder="Hasta">
+                <select id="filter-type">
+                    <option value="">Todos</option>
+                    <option value="ingreso">Ingresos</option>
+                    <option value="gasto">Gastos</option>
+                </select>
+                <select id="filter-category">
+                    <option value="">Todas las categorías</option>
+                </select>
+                <button id="apply-filters" class="btn-secondary">Filtrar</button>
+                <button id="clear-filters" class="btn-secondary">Limpiar</button>
+            </div>
+
+            <!-- Add Transaction Button -->
+            <button id="add-transaction-btn" class="btn-primary">➕ Nueva Transacción</button>
+
+            <!-- Transactions List -->
+            <div id="transactions-list"></div>
+        </div>
+
+        <!-- Configuration View -->
+        <div id="config" class="view">
+            <h2>Configuración</h2>
+            
+            <!-- Categories Management -->
+            <div class="config-section">
+                <h3>Gestión de Categorías</h3>
+                <form id="add-category-form">
+                    <div class="form-group">
+                        <input type="text" id="new-category" placeholder="Nueva categoría" required>
+                        <input type="color" id="category-color" value="#3498db">
+                        <button type="submit" class="btn-primary">Agregar Categoría</button>
+                    </div>
+                </form>
+                <div id="categories-list"></div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="config-section">
+                <h3>Gestión de Datos</h3>
+                <button id="export-data" class="btn-secondary">📥 Exportar Datos</button>
+                <button id="import-data" class="btn-secondary">📤 Importar Datos</button>
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+                <button id="clear-data" class="btn-danger">🗑️ Borrar Todos los Datos</button>
+            </div>
+        </div>
+
+        <!-- Transaction Modal -->
+        <div id="transaction-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modal-title">Nueva Transacción</h2>
+                <form id="transaction-form">
+                    <div class="form-group">
+                        <label for="transaction-type">Tipo:</label>
+                        <select id="transaction-type" required>
+                            <option value="ingreso">Ingreso</option>
+                            <option value="gasto">Gasto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-date">Fecha:</label>
+                        <input type="date" id="transaction-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-amount">Valor:</label>
+                        <input type="number" id="transaction-amount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-category">Categoría:</label>
+                        <select id="transaction-category" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-description">Descripción:</label>
+                        <input type="text" id="transaction-description" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Guardar</button>
+                        <button type="button" id="cancel-transaction" class="btn-secondary">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
