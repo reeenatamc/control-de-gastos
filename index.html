@@ -20,27 +20,54 @@
 
         <!-- Dashboard View -->
         <div id="dashboard" class="view active">
-            <h2>Dashboard Principal</h2>
+            <div class="dashboard-header">
+                <h2>Dashboard Principal</h2>
+                <div class="period-selector">
+                    <button class="period-btn active" data-period="all">Todo</button>
+                    <button class="period-btn" data-period="month">Este Mes</button>
+                    <button class="period-btn" data-period="week">Esta Semana</button>
+                </div>
+            </div>
             
             <!-- Summary Cards -->
             <div class="summary-cards">
                 <div class="card income-card">
-                    <h3>Ingresos</h3>
-                    <p class="amount" id="total-income">$0.00</p>
+                    <div class="card-icon">📈</div>
+                    <div class="card-content">
+                        <h3>Ingresos</h3>
+                        <p class="amount" id="total-income">$0.00</p>
+                        <span class="card-trend" id="income-trend"></span>
+                    </div>
                 </div>
                 <div class="card expense-card">
-                    <h3>Gastos</h3>
-                    <p class="amount" id="total-expenses">$0.00</p>
+                    <div class="card-icon">📉</div>
+                    <div class="card-content">
+                        <h3>Gastos</h3>
+                        <p class="amount" id="total-expenses">$0.00</p>
+                        <span class="card-trend" id="expenses-trend"></span>
+                    </div>
                 </div>
                 <div class="card balance-card">
-                    <h3>Balance</h3>
-                    <p class="amount" id="balance">$0.00</p>
+                    <div class="card-icon">💰</div>
+                    <div class="card-content">
+                        <h3>Balance</h3>
+                        <p class="amount" id="balance">$0.00</p>
+                        <span class="card-trend" id="balance-trend"></span>
+                    </div>
+                </div>
+                <div class="card transactions-card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-content">
+                        <h3>Transacciones</h3>
+                        <p class="amount" id="total-transactions">0</p>
+                        <span class="card-subtitle">Total registradas</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Quick Add Transaction -->
             <div class="quick-add">
-                <h3>Agregar Transacción Rápida</h3>
+                <h3>➕ Agregar Transacción Rápida</h3>
                 <form id="quick-add-form">
                     <div class="form-row">
                         <select id="quick-type" required>
@@ -58,15 +85,40 @@
                 </form>
             </div>
 
-            <!-- Chart Section -->
-            <div class="chart-section">
-                <h3>Gastos por Categoría</h3>
-                <div id="category-chart" class="chart-container"></div>
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <!-- Pie Chart for Category Breakdown -->
+                <div class="chart-section">
+                    <h3>🥧 Gastos por Categoría</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="category-pie-chart"></canvas>
+                    </div>
+                    <div id="category-legend" class="chart-legend"></div>
+                </div>
+
+                <!-- Bar Chart for Monthly Overview -->
+                <div class="chart-section">
+                    <h3>📊 Resumen Mensual</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="monthly-bar-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Chart for Trend -->
+            <div class="chart-section full-width">
+                <h3>📈 Tendencia de Balance</h3>
+                <div class="chart-wrapper-wide">
+                    <canvas id="trend-line-chart"></canvas>
+                </div>
             </div>
 
             <!-- Recent Transactions -->
             <div class="recent-transactions">
-                <h3>Transacciones Recientes</h3>
+                <div class="section-header">
+                    <h3>🕐 Transacciones Recientes</h3>
+                    <a href="#" class="view-all-link" data-view="wallet">Ver todas →</a>
+                </div>
                 <div id="recent-list"></div>
             </div>
         </div>
@@ -164,5 +216,20 @@
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Load Chart.js asynchronously after the page loads
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+            script.onload = function() {
+                // Dispatch custom event when Chart.js loads
+                window.dispatchEvent(new CustomEvent('chartjs-loaded'));
+            };
+            script.onerror = function() {
+                console.log('Chart.js could not be loaded. Charts will display as bars.');
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
 </body>
 </html>
