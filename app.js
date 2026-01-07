@@ -525,7 +525,8 @@ class UIController {
     }
 
     formatCurrency(amount) {
-        return new Intl.NumberFormat('es-MX', {
+        // Use es-US for Spanish formatting with USD currency
+        return new Intl.NumberFormat('es-US', {
             style: 'currency',
             currency: 'USD'
         }).format(amount);
